@@ -89,7 +89,7 @@ def chk(cc, mon, year, cvv, charge="10"):
 @app.route("/api/v1/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
-    if request.args.get("authKey").strip() not in authKey:
+    if request.args.get("authKey") not in authKey:
         return "Unauthorized Access"
     if request.args.get("pipe"):
         tmp=request.args.get('pipe').split("|")
