@@ -1,6 +1,8 @@
-import requests, os, re
+import requests, os, re, urllib3
 from flask import *
 from bs4 import BeautifulSoup
+
+urllib3.disable_warnings()
 
 
 authKey=["vaibhav"]
@@ -38,7 +40,7 @@ def getHTTPProxy():
     ok=[]
     for proxy in proxies:
         if len(proxy.split(":"))==2:
-            print(proxy)
+          #  print(proxy)
             ok.append(proxy)
     ip=ok[0].split(":")[0]
     return {"http"  : "http://"+ok[0]}, ip
