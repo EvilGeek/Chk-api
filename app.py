@@ -33,7 +33,7 @@ def sendRequest():
     req=requests.get("https://www.sslproxies.org/", headers=h, verify=False).text 
     return req
 
-def getProxy():
+def getHTTProxy():
     proxies=getProxy(sendRequest())
     ok=[]
     for proxy in proxies:
@@ -55,7 +55,7 @@ def sendIP(request, page=""):
         return ip
 
 def chk(cc, mon, year, cvv, charge="10"):
-    proxy, ip=getProxy()
+    proxy, ip=getHTTPProxy()
     h1= {
     "Host": "api.stripe.com",
     "content-length": "240",
