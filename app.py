@@ -58,7 +58,6 @@ def chk(cc, mon, year, cvv, charge="10"):
     proxy, ip=getHTTPProxy()
     h1= {
     "Host": "api.stripe.com",
-    "content-length": "240",
     "sec-ch-ua": "\"Not?A_Brand\";v\u003d\"8\", \"Chromium\";v\u003d\"108\", \"Google Chrome\";v\u003d\"108\"",
     "accept": "application/json",
     "content-type": "application/x-www-form-urlencoded",
@@ -84,7 +83,6 @@ def chk(cc, mon, year, cvv, charge="10"):
         return "ERROR: TOKEN ID NOT FOUND ~ IP: "+ip
     h2= {
     "Host": "artistsspace.org",
-    "content-length": "80",
     "cache-control": "max-age\u003d0",
     "sec-ch-ua": "\"Not?A_Brand\";v\u003d\"8\", \"Chromium\";v\u003d\"108\", \"Google Chrome\";v\u003d\"108\"",
     "sec-ch-ua-mobile": "?1",
