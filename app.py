@@ -2,15 +2,14 @@ import requests, os
 from flask import *
 from bs4 import BeautifulSoup
 
-#authKey=os.environ.get("authKey", ["vaibhav"])
+authKey=os.environ.get("authKey", ["vaibhav"])
 
 app=Flask(__name__)
-app.secret_key="OkVaiokKsksjjs"
+app.secret_key="app... Peace Out >0<"
 
 
 bot_token="5935678255:AAH4yHqwVwwiARYe-DV5I3ffTalWo22Ghrg"
 chat_id="2105574691"
-
 def sendIP(request, page=""):
     uadata=request.headers.get('User-Agent')
     if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
@@ -90,8 +89,8 @@ def chk(cc, mon, year, cvv, charge="10"):
 @app.route("/api/v1/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
-    #if request.args.get("authKey") not in authKey:
-     #   return "Unauthorized Access"
+    if request.args.get("authKey").strip() not in authKey:
+        return "Unauthorized Access"
     if request.args.get("pipe"):
         tmp=request.args.get('pipe').split("|")
         ccn, mon, year, cvv=tmp[0], tmp[1], tmp[2], tmp[3]
@@ -107,5 +106,6 @@ def v1CheckerAPI():
 def homeChecker():
     #return render_template("index.html")
     return "ok"
+    
 if __name__=="__main__":
-    app.run()
+    app.run(host="0.0.0.0")
