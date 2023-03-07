@@ -2,8 +2,8 @@ import requests, os
 from flask import *
 from bs4 import BeautifulSoup
 
-authKey=os.environ.get("authKey", ["vaibhav"])
-
+#authKey=os.environ.get("authKey", ["vaibhav"])
+authKey=["vaibhav"]
 app=Flask(__name__)
 app.secret_key="app... Peace Out >0<"
 
