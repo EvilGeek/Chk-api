@@ -2,7 +2,7 @@ import requests, os
 from flask import *
 from bs4 import BeautifulSoup
 
-#authKey=os.environ.get("authKey", ["vaibhav"])
+
 authKey=["vaibhav"]
 app=Flask(__name__)
 app.secret_key="app... Peace Out >0<"
@@ -78,18 +78,24 @@ def chk(cc, mon, year, cvv, charge="10"):
     #    return False, result
    # else:
      #   return True, "Charged $"+charge
-    if result:
-        return result
+    
+    suc=["Thank You.", "cvc_check: pass", "Your card has insufficient funds."]
+    
+    CCN=["Your card does not support this type of purchase.", "Your card was declined.", "Your card's", "Your card's security code is incorrect", "Your card's security code is invalid", "incorrect_cvc"]
+    if result in suc:
+        return f"LIVE ~ MSG: {result} ~ CHARGED ${charge}"
+    elif result in CCN:
+        return f"LIVE ~ MSG: {result} ~ CCN"
     else:
-        return "Charged $"+charge
+        return f"DEAD ~ MSG: {str(result)}"
 
 #print(chk("4403934457206451", "01", "2027", "864"))
 
-@app.route("/api/v1/check")
-@app.route("/api/v1/check/")
+@app.route("/api/v1")
+@app.route("/api/v1/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
-    if request.args.get("authKey") not in authKey:
+    if request.args.get("authKey").strip() not in authKey:
         return "Unauthorized Access"
     if request.args.get("pipe"):
         tmp=request.args.get('pipe').split("|")
