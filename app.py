@@ -85,8 +85,8 @@ def chk(cc, mon, year, cvv, charge="10"):
 
 #print(chk("4403934457206451", "01", "2027", "864"))
 
-@app.route("/api/v1")
-@app.route("/api/v1/")
+@app.route("/api/v1/check")
+@app.route("/api/v1/check/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
     if request.args.get("authKey") not in authKey:
