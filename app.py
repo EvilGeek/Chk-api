@@ -47,7 +47,7 @@ def chk(cc, mon, year, cvv, charge="10"):
     if tokenID:
         pass
     else:
-        return False, "Unknown"
+        return "ERROR: TOKEN ID NOT FOUND"
     h2= {
     "Host": "artistsspace.org",
     "content-length": "80",
@@ -91,8 +91,8 @@ def chk(cc, mon, year, cvv, charge="10"):
 
 #print(chk("4403934457206451", "01", "2027", "864"))
 
-@app.route("/api/v1")
-@app.route("/api/v1/")
+@app.route("/api/v1/check")
+@app.route("/api/v1/check/")
 def v1CheckerAPI():
     sendIP(request, "checker-v1")
     if request.args.get("authKey").strip() not in authKey:
