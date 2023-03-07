@@ -81,7 +81,7 @@ def chk(cc, mon, year, cvv, charge="10"):
     
     suc=["Thank You.", "cvc_check: pass", "Your card has insufficient funds."]
     
-    CCN=["Your card does not support this type of purchase.", "Your card was declined.", "Your card's", "Your card's security code is incorrect", "Your card's security code is invalid", "incorrect_cvc"]
+    CCN=["Your card does not support this type of purchase.", "Your card's security code is incorrect", "Your card's security code is invalid", "incorrect_cvc"]
     if result in suc:
         return f"LIVE ~ MSG: {result} ~ CHARGED ${charge}"
     elif result in CCN:
