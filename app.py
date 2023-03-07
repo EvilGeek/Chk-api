@@ -33,7 +33,7 @@ def sendRequest():
     req=requests.get("https://www.sslproxies.org/", headers=h, verify=False).text 
     return req
 
-def getHTTProxy():
+def getHTTPProxy():
     proxies=getProxy(sendRequest())
     ok=[]
     for proxy in proxies:
