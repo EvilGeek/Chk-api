@@ -41,7 +41,7 @@ def getHTTPProxy():
            # print(proxy)
             ok.append(proxy)
     ip=ok[0].split(":")[0]
-    return {"http": "http://"+ok[0]}, ip
+    return {"http": "http://"+ok[0], "no_proxy": None, "https": None}, ip
 
 
 def multiexplode(string):
