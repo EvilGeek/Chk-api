@@ -5,10 +5,10 @@ from bs4 import BeautifulSoup
 import random
 import string
 from flask import Flask, request, make_response
-from flask_cors import CORS
+
 
 app = Flask(__name__)
-CORS(app)
+app.secret_key="okvai90000000"
 
 
 def getProxy(html):
